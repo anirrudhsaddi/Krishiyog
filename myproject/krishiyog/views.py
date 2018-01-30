@@ -10,13 +10,9 @@ def index(request):
 
 # Create your views here.
 
-
-
-
-
 def items_list(request):
-	year_list  = field.objects.values('year').distinct()
-	season_list = field.objects.values('season').distinct()
+	year_list  = field.objects.values('year').distinct()        #gets a list of unique 'years' entered into the database instead of a full list of years, TODO: needs to be sorted
+	season_list = field.objects.values('season').distinct()     #gets a list of unique seasons. TODO: avoid calling the database, create a local choice since season are limited and are predefined in the model
 	
 	return render(request, 'krishiyog/items_list.html', {'year_list': year_list, 'season_list': season_list })
 
@@ -25,6 +21,7 @@ def farmers_list(request):
 	return render(request, 'krishiyog/farmers_list.html',{'farmers_list':farmers_list})
 
 def add_farmer(request):
+		
 		if request.method == "POST":
 				form = farmerForm(request.POST)
 
@@ -40,12 +37,10 @@ def add_farmer(request):
 
 				
 def edit_farmer(request, pk=None):
-		
+		# Request is a GET method so it skips past to ELSE. POST request comes through when the save button is clicked. 
 		print ('Method request for edit:', request.method)
 		item=get_object_or_404(farmer, pk=pk)
 		if request.method=="POST":
-
-			
 			
 			form=farmerForm(request.POST, instance=item)
 			if form.is_valid():
@@ -69,7 +64,7 @@ def edit_farmer(request, pk=None):
 
 
 def delete_farmer(request, id=None):
-
+		#HTML Form methods are limited to GET and POST, using the post method to identify delete call in delete view
 		if request.method=="POST":
 			farmer.objects.filter(id=id).delete()
 			return redirect('/farmers_list/')
@@ -86,9 +81,6 @@ def farms_list(request):
 	return render(request, 'krishiyog/farms_list.html',{'farms_list':farms_list})
 
 def add_farm(request):
-
-		
-
 		
 		if request.method == "POST":
 				form = farmForm(request.POST)
@@ -120,10 +112,8 @@ def edit_farm(request, pk=None):
 				return redirect('/farms_list/')
 
 		else:		
-		
 			
-			
-			farm_geojson = item.geo_farm.geojson
+			farm_geojson = item.geo_farm.geojson            
 			
 			form = farmForm(instance=item)
 			context = {
