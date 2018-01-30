@@ -9,7 +9,7 @@ from django.contrib.gis.geos import GEOSGeometry
 
 
 
-def ValidateField(multipolygon, farmname):
+"""def ValidateField(multipolygon, farmname):
 
 	geos_field = GEOSGeometry(multipolygon)
 	farm_s = farm.objects.get(farm_name = farmname)
@@ -20,7 +20,7 @@ def ValidateField(multipolygon, farmname):
 		raise ValidationError(
 		_('Field is not inside the selected farm %(farm)'),
 		params={'farmname': farmname},
-        )
+        )"""
 
 # Create your models here.
 
@@ -33,29 +33,24 @@ class farmer(models.Model):
     def __str__(self):
 	      return self.first_name
 
-
-
-
-
 class farm(models.Model):
-
 
     owner = models.ForeignKey(farmer, on_delete=models.CASCADE)
     farm_name = models.CharField(max_length=30)
     geo_farm = models.MultiPolygonField(srid=4326)
     objects = models.Manager()
     def __str__(self):
-		    return self.farm_name
+		    return self.farm_name     
 																										    
 		
 class field(models.Model):
 
+    #Specifying choices for the season. The model will not accept any other season than those specified here. 
     RABI = 'RABI'
     KHARIF = 'KHARIF'
     SEASON_CHOICES = (
         (RABI, 'rabi'),
         (KHARIF, 'kharif'),
-        
     )
 
     farm = models.ForeignKey(farm, on_delete=models.CASCADE)
@@ -66,6 +61,7 @@ class field(models.Model):
     """geo_field = models.MultiPolygonField(srid=4326, validators =[ValidateField(geo_field,farm)])"""
     objects = models.Manager()
     
+    # Def save() is called by the model when you click the save button to the database. Validation of the multipolygon field is done here before being saved.	
     def clean(self, *args, **kwargs):
         # add custom validation here
         print (self.geo_field, '\n New line')
@@ -74,10 +70,9 @@ class field(models.Model):
         farm_s = farm.objects.get(farm_name = self.farm)
 	
         geos_farm=GEOSGeometry(farm_s.geo_farm)
-
-        
+     
     
-        if not(geos_field.within(geos_farm)):
+        if not(geos_field.within(geos_farm)):              # GEOS method check if field is within the farm, returns a T or F. 
             raise ValidationError(
             _('Field is not inside the selected farm'),
             #params={'farm': farm_s.farm_name },
