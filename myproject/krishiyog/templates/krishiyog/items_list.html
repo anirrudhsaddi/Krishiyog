@@ -1,0 +1,61 @@
+<html>
+<body>
+
+		<div><head> Welcome to Krishiyog </head></div>
+
+		<div style="width:100%; height: 200px;">
+
+		<p> Click the button below to view a list of farmers </p>
+		<a href="{% url 'farmers_list' %}" >
+			<input type="button" value="Farmers list"/>
+		</a>
+
+		<p> Click the button below to view all farms </p>
+		<a href="{% url 'farms_list' %}" >
+			<input type="button" value="Farms list"/>
+		</a>
+
+		<p> Click the button below to view all fields </p>
+		<a href="{% url 'fields_list' %}" >
+			<input type="button" value="Fields list"/>
+		</a>
+		<!--<button onclick="redirectFunction()">View Farmers </button>-->
+		<!--<p<a class="button" href="{% url 'farmers_list' %}">farmers_list</a></p>-->
+		<!--<script>
+		function redirectFunction(){
+		
+		}
+		</script>-->
+		</div><hr/>
+
+		<div style="width:100%; height: 200px;">
+		<head> Query Functions <head>
+		<p> Select year and season and query farms</p>
+		
+		
+			
+		<form  method="POST" style="display: inline;">
+		{%csrf_token %}	
+		<select name = 'year' style="width:80px; height: 20px;" >
+		{% for year in year_list%}
+            	<option>{{year.year}}</option>
+            	
+		{% endfor %}
+        	</select>
+        	<select name = 'season' style="width:80px; height: 20px;">
+		{% for season in season_list%}
+            	<option>{{season.season}}</option>
+            	
+		{% endfor %}
+      	 	</select>	
+		<input type="submit" formaction="{% url 'fields_list' %}" value="View Fields">
+					
+
+		</form>
+
+		
+		
+		</div>
+</body>
+</html>
+

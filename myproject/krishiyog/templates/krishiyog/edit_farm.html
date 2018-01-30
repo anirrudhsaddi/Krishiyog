@@ -1,0 +1,64 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+        <script src="http://openlayers.org/api/OpenLayers.js"></script> 
+    <style>
+        html,body {
+            height: 99%;
+            width: 99%;
+        }
+        #map {
+            width: 800px;
+            height: 500px;
+            border: 1px solid black;
+        }   
+    </style>
+
+    <script type="text/javascript">
+            var map;
+
+            function init(){
+        map = new OpenLayers.Map('map');
+                var base_layer = new OpenLayers.Layer.WMS( "OpenLayers WMS",
+               "http://vmap0.tiles.osgeo.org/wms/vmap0?", {layers: 'basic'} );
+            map.addLayer(base_layer);
+
+        var layer = new OpenLayers.Layer.Vector("layername");
+        map.addLayer(layer);
+
+        var format = new OpenLayers.Format.GeoJSON();
+        var feat = format.read({{farm_geojson|safe}});  
+        layer.addFeatures(feat);
+
+        map.setCenter(new OpenLayers.LonLat(l_val,L_val),zoom_val);
+        map.addControl(new OpenLayers.Control.LayerSwitcher());
+       }
+     </script>
+</head>
+
+	<body onload = "init()">
+	<div><p><a href= "{% url 'items_list' %}">
+	<input type="button" value="Home"/>
+	</a></p></div>
+	<div>
+		<form method="POST" action="">
+		{% csrf_token %}
+	
+			<div>{{form.owner}}</div>
+			<div>{{form.farm_name}}</div>
+			
+			<div id="map">{{farm_geojson}}</div>
+			<input type="submit" value="Save">
+
+		</form>
+    	</div>
+    	</body>
+</html>
+
+	<!--form method="POST" action="">
+	{% csrf_token %}
+	{{form.as_p}}
+	<input type="submit" value="Save">
+
+	</form-->
+

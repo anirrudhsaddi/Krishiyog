@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<p><a href= "{% url 'items_list' %}">
+	<input type="button" value="Home"/>
+</a></p>
+
+
+<table>
+
+	<tr>
+			<th>Owner</th>
+			<th>Farm Name</th>
+
+			
+			<th>Edit/Delete</th>
+	</tr>
+
+	{% for item in farms_list%}
+	<tr>
+			<td>{{item.owner}}</td>
+			<td>{{item.farm_name}}</td>
+
+			
+			<td>
+					<form action="{% url 'edit_farm' item.id %}" method="GET" style="display: inline;">
+					{%csrf_token %}
+					<button type="submit" class="btn" style="height:40px;width:40px">Edit</button>
+					</form>
+
+					<form action="{%url 'delete_farm' item.id %}" method="POST" style="display: inline";>
+					{%csrf_token %}
+					<button type="submit" class="btn" style="height:40px;width:60px">Delete</button>
+					</form>
+
+					
+			</td>
+			
+	</tr>
+	{% endfor %}
+
+</table>
+<br>
+<p><a href= "{% url 'add_farm' %}">
+	<input type="button" value="Add Farm"/>
+</a></p>
+
+</body>
+</html>
+
+

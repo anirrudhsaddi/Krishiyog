@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<p><a href= "{% url 'items_list' %}">
+	<input type="button" value="Home"/>
+</a></p>
+
+
+<table>
+
+	<tr>
+			<th>Farm</th>
+			<th>Crop</th>
+			<th>Year</th>
+			<th>Season</th>
+			<th>Edit/Delete</th>
+	</tr>
+
+	{% for item in fields_list%}
+	<tr>
+			<td>{{item.farm}}</td>
+			<td>{{item.crop}}</td>
+			<td>{{item.year}}</td>
+			<td>{{item.season}}</td>
+			<td>
+					<form action="{% url 'edit_fields' item.id %}" method="GET" style="display: inline;">
+					{%csrf_token %}
+					<button type="submit" class="btn" style="height:40px;width:40px">Edit</button>
+					</form>
+
+					<form action="{%url 'delete_fields' item.id %}" method="POST" style="display: inline";>
+					{%csrf_token %}
+					<button type="submit" class="btn" style="height:40px;width:60px">Delete</button>
+					</form>
+
+					
+			</td>
+			
+	</tr>
+	{% endfor %}
+
+</table>
+<br>
+<p><a href= "{% url 'add_fields' %}">
+	<input type="button" value="Add Field"/>
+</a></p>
+
+</body>
+</html>
+
+
