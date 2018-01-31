@@ -9,6 +9,7 @@ def index(request):
 	return HttpResponse("You are at the landing page for Krishiyog's demo module")
 
 # Create your views here.
+#Views generate here are very crude. Can be more efficient. 
 
 def items_list(request):
 	year_list  = field.objects.values('year').distinct()        #gets a list of unique 'years' entered into the database instead of a full list of years, TODO: needs to be sorted
